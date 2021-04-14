@@ -100,6 +100,7 @@ body {
 
 .task {
   list-style: none;
+  grid-template-columns: 40px 416px 40px;
 }
 
 .check {
@@ -166,4 +167,21 @@ body {
 
 .menu__item.active {
   font-weight: 700;
+}
+
+.task:hover .task__btn-remove {
+  display: block;
+}
+
+.task__btn-remove {
+  display: none;
+  outline: none;
+  border: none;
+  background: #fff;
+  color: #ae8888;
+  font-weight: 700;
+}
+
+.task__btn-remove:hover {
+  font-size: 24px;
 }
