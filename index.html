@@ -9,13 +9,13 @@
   </head>
   <body>
     <div class="container">
-      <div class="header">
+      <header class="header">
         <h1 class="logo">todos</h1>
-      </div>
+      </header>
 
       <div class="block"/></div>
 
-      <div class="todo">
+      <section class="todo">
         <div class="wrapper">
           <div class="check__wrapper">
             <button class="check-all">
@@ -28,41 +28,57 @@
             placeholder="Whats need to be done"
           />
         </div>
-        <div class="elements">
-          <ul class="elements-list">
-            <li class="elements-item wrapper">
+        <div class="tasks">
+          <ul class="tasks-list">
+            <li class="task wrapper">
               <button class="check">
                 <div class="check-btn ">✔</div>
               </button>
-              <div class="elements-item__wrapper">
-                <div class="elements-item__text light-black">
+              <div class="task__wrapper">
+                <div class="task__text light-black">
                   1
                 </div>
               </div>
             </li>
-            <li class="elements-item wrapper">
+            <li class="task wrapper">
               <button class="check">
                 <div class="check-btn ">✔</div>
               </button>
-              <div class="elements-item__wrapper">
-                <div class="elements-item__text light-black">
+              <div class="task__wrapper">
+                <div class="task__text light-black">
                   2
                 </div>
               </div>
             </li>
-            <li class="elements-item wrapper">
+            <li class="task wrapper">
               <button class="check">
                 <div class="check-btn ">✔</div>
               </button>
-              <div class="elements-item__wrapper">
-                <div class="elements-item__text light-black">
+              <div class="task__wrapper">
+                <div class="task__text light-black">
                   3
                 </div>
               </div>
             </li>
           </ul>
         </div>
-      </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer__inner">
+          <div class="status">
+            <strong>1</strong> items left
+          </div>
+          <navbar class="navbar">
+              <ul class="menu">
+                <li class="menu__item active">All</li>
+                <li class="menu__item">Active</li>
+                <li class="menu__item">Completed</li>
+              </ul>
+          </navbar>
+        </div>
+      </footer>
+
     </div>
   </body>
 </html>
