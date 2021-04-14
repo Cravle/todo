@@ -4,9 +4,9 @@ const taskItem = document.createElement("div")
 const list = document.body.querySelector(".tasks-list")
 
 input.addEventListener("keyup", (e) => {
-    if (e.key === "Enter") {
-        const taskItem = document.createElement("div")
-        taskItem.innerHTML = `
+  if (e.key === "Enter") {
+    const taskItem = document.createElement("div")
+    taskItem.innerHTML = `
         <li class="task wrapper">
               <button class="check">
                 <div class="check-btn ">✔</div>
@@ -19,10 +19,9 @@ input.addEventListener("keyup", (e) => {
             </li>
         `
 
+    list.appendChild(taskItem)
+    input.value = ""
 
-        list.appendChild(taskItem)
-        input.value = ""
-
-    }
+  }
 })
 
