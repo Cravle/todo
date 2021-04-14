@@ -19,7 +19,7 @@
         <div class="wrapper">
           <div class="check__wrapper">
             <button class="check-all">
-              <div class="check-btn rotate90">»</div>
+              <div class="check-btn rotate90" data-all>»</div>
             </button>
           </div>
           <input
@@ -30,36 +30,8 @@
         </div>
         <div class="tasks">
           <ul class="tasks-list">
-            <li class="task wrapper">
-              <button class="check">
-                <div class="check-btn ">✔</div>
-              </button>
-              <div class="task__wrapper">
-                <div class="task__text light-black">
-                  1
-                </div>
-              </div>
-            </li>
-            <li class="task wrapper">
-              <button class="check">
-                <div class="check-btn ">✔</div>
-              </button>
-              <div class="task__wrapper">
-                <div class="task__text light-black">
-                  2
-                </div>
-              </div>
-            </li>
-            <li class="task wrapper">
-              <button class="check">
-                <div class="check-btn ">✔</div>
-              </button>
-              <div class="task__wrapper">
-                <div class="task__text light-black">
-                  3
-                </div>
-              </div>
-            </li>
+            
+        
           </ul>
         </div>
       </section>
@@ -67,18 +39,21 @@
       <footer class="footer">
         <div class="footer__inner">
           <div class="status">
-            <strong>1</strong> items left
+            <strong>0</strong> items left
           </div>
           <navbar class="navbar">
               <ul class="menu">
-                <li class="menu__item active">All</li>
-                <li class="menu__item">Active</li>
-                <li class="menu__item">Completed</li>
+                <li class="menu__item active" data-sort="all">All</li>
+                <li class="menu__item" data-sort="active">Active</li>
+                <li class="menu__item" data-sort="complited">Completed</li>
               </ul>
           </navbar>
         </div>
       </footer>
 
     </div>
+
+
+    <script src="./script/script.js"></script>
   </body>
 </html>
