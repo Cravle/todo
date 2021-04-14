@@ -1,8 +1,15 @@
 const input = document.body.querySelector(".input");
-
 const taskItem = document.createElement("div")
 const list = document.body.querySelector(".tasks-list")
+const counterItem = document.body.querySelector(".status").querySelector("strong")
+let completed = []
 
+let counter = 0;
+
+const refreshCounter = () => {
+  counterItem.innerText = counter;
+  console.log(counter.innerText)
+}
 
 
 input.addEventListener("keyup", (e) => {
@@ -21,6 +28,24 @@ input.addEventListener("keyup", (e) => {
         <button class="task__btn-remove">X</button>
       </li>
         `
+    const completeBtn = taskItem.querySelector(".check-btn")
+    const taskText = taskItem.querySelector(".task__text")
+
+    completeBtn.addEventListener("click", () => {
+      if (!completed.find(el => el === taskItem)) {
+        completed.push(taskItem)
+        taskText.style.textDecoration = "line-through"
+        counter--
+        refreshCounter()
+        return
+      }
+      taskText.style.textDecoration = "none"
+      completed = completed.filter((el) => el !== taskItem)
+      counter++
+      refreshCounter()
+
+    })
+
 
 
 
@@ -28,11 +53,19 @@ input.addEventListener("keyup", (e) => {
     const deleteBtn = taskItem.querySelector(".task__btn-remove")
     deleteBtn.addEventListener("click", () => {
       taskItem.remove();
+      counter--
+      refreshCounter()
+      if (completed.find(el => el === taskItem)) {
+        completed = completed.filter((el) => el !== taskItem)
+      }
     })
 
     list.appendChild(taskItem)
+    counter++;
     input.value = ""
-
+    refreshCounter()
   }
 })
+
+
 
