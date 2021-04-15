@@ -1,4 +1,7 @@
-const ACTIVE = 'active';
+const ACTIVE = 'active'
+const COMPLITED = 'complited'
+const EDIT = 'edit'
+
 const getElement = (selector) => document.body.querySelector(selector)
 
 const input = getElement('.input')
@@ -9,63 +12,110 @@ const footer = document.body.querySelector("footer")
 const completeAllBtn = document.querySelector("[data-all]")
 //const list = [{name: 'test', status:ACTIVE }]
 
-
-let allLists;
-
-let completed = [] // arr for comleted li
+let listArr = [];
 
 let counter = 0;
 
 
-const completeAll = ((listItems) => {
-  if (!listItems.length) {
-    return;
+const toggleStatusTasks = () => {
+  let flag = false;
+  for (let i = 0; i < listArr.length; i++) {
+    if (listArr[i].status === ACTIVE) {
+      flag = true
+      break
+    }
   }
 
-  listItems.forEach(el => {
-    const completeBtn = el.querySelector(".check-btn")
-    const taskText = el.querySelector(".task__text")
-    taskText.style.textDecoration = "line-through"
-    completeBtn.style.color = "black"
-    completed.push(el)
-  })
-  counter = 0
 
-})
-
-const uncompleteAll = ((listItems) => {
-  listItems.length > 0 &&
-    listItems.forEach(el => {
-      const completeBtn = el.querySelector(".check-btn")
-      const taskText = el.querySelector(".task__text")
-      taskText.style.textDecoration = "none"
-      completeBtn.style.color = "rgb(217, 217, 217)"
-
+  if (flag) {
+    listArr = listArr.map(el => {
+      el.status = COMPLITED
+      return el
     })
-  counter = listItems.length
-  completed = []
-})
-//unccomplet all
 
-//повесить ивент на нажатие toggleAll
-completeAllBtn.addEventListener("click", () => {
-  const listItems = document.querySelectorAll(".task")
-  allLists = listItems
-  //если counter === 0 uncompleteAll
-  if (counter === 0) {
-    uncompleteAll(listItems);
-    refreshCounter();
-    return
+  } else {
+    listArr = listArr.map(el => {
+      el.status = ACTIVE
+      return el
+    })
   }
-  completeAll(listItems);
-  refreshCounter();
+  generateList()
+
+
+
+}
+
+
+const generateList = () => {
+  list.innerHTML = ""
+  const newList = listArr.map(el => {
+    const taskItem = document.createElement("div")
+    if (el.status === COMPLITED) {
+      taskItem.innerHTML = `
+        <li class="task wrapper">
+          <button class="check checked">✔</button>
+          <div class="task__wrapper">
+            <div class="task__text complited light-black ">
+              ${el.text}
+          </div>
+        </div>
+        <button class="task__btn-remove">X</button>
+      </li>
+        `
+      return taskItem
+    }
+    taskItem.innerHTML = `
+        <li class="task wrapper">
+          <button class="check">✔</button>
+          <div class="task__wrapper">
+            <div class="task__text light-black ">
+              ${el.text}
+          </div>
+        </div>
+        <button class="task__btn-remove">X</button>
+      </li>
+        `
+    return taskItem;
+  })
+
+  let localCounter = 0;
+  listArr.forEach((el) =>
+    el.status === ACTIVE && localCounter++
+  )
+
+  counter = localCounter
+  refreshCounter()
+
+  newList.forEach(el => list.appendChild(el))
+}
+
+
+list.addEventListener("click", (e) => {
+  if (e.target.classList.contains("check")) {
+    const text = e.target.parentElement.querySelector('.task__text').innerText
+    listArr = listArr.map(el => {
+      if (el.text === text) {
+        el.status === ACTIVE ? el.status = COMPLITED : el.status = ACTIVE
+      }
+      return el
+    })
+    generateList()
+  }
+
+  if (e.target.className === "task__btn-remove") {
+    const text = e.target.parentElement.querySelector('.task__text').innerText
+
+    listArr = listArr.filter(el => el.text !== text && el)
+    generateList()
+
+  }
 
 })
 
 
 const refreshCounter = () => {
   counterItem.innerText = counter;
-  if (counter === 0 && completed.length === 0) {
+  if (counter === 0 && listArr.length === 0) {
     footer.style.display = "none"
   } else {
     footer.style.display = "grid"
@@ -73,73 +123,33 @@ const refreshCounter = () => {
 }
 refreshCounter();
 
-
+//submit input
 input.addEventListener("keyup", (e) => {
   if (e.key === "Enter") {
-    const taskItem = document.createElement("div")
-    taskItem.innerHTML = `
-        <li class="task wrapper">
-          <button class="check">
-            <div class="check-btn ">✔</div>
-          </button>
-          <div class="task__wrapper">
-            <div class="task__text light-black">
-              ${input.value}
-          </div>
-        </div>
-        <button class="task__btn-remove">X</button>
-      </li>
-        `
-    const completeBtn = taskItem.querySelector(".check-btn")
-    const taskText = taskItem.querySelector(".task__text")
+    if (input.value.trim().length) {
+      let text = input.value;
 
 
-    //complete task
-    completeBtn.addEventListener("click", () => {
-      //if this item is not checked
-      if (!completed.find(el => el === taskItem)) {
-        completed.push(taskItem)
-        taskText.style.textDecoration = "line-through"
-        counter--
-        completeBtn.style.color = "black"
-        refreshCounter()
-        return
-      }
-      taskText.style.textDecoration = "none"
-      completeBtn.style.color = "rgb(217, 217, 217)"
 
-      completed = completed.filter((el) => el !== taskItem)
-      counter++
+
+      listArr.forEach((el, id) => {
+        if (el.text === text)
+          text = input.value + `[${id + 1}]`
+      })
+
+      listArr.push({ text, status: ACTIVE })
+      generateList()
+      input.value = ""
+
       refreshCounter()
-
-    })
-
-
-
-
-
-    const deleteBtn = taskItem.querySelector(".task__btn-remove")
-
-    //delete task
-    deleteBtn.addEventListener("click", () => {
-      taskItem.remove();
-      if (completed.find(el => el === taskItem)) {
-        completed = completed.filter((el) => el !== taskItem)
-        refreshCounter()
-
-        return
-      }
-      counter--;
-      refreshCounter()
-
-    })
-
-    list.appendChild(taskItem)
-    counter++;
-    input.value = ""
-    refreshCounter()
+    }
   }
 })
+
+
+completeAllBtn.addEventListener('click', toggleStatusTasks)
+
+
 
 
 const ulMenu = document.querySelector(".menu")
@@ -159,10 +169,12 @@ ulMenu.addEventListener("click", (e) => {
 
     }
     if (e.target.getAttribute("data-sort") === "complited") {
-      console.log("complited")
     }
   }
 })
+
+
+
 
 
 
