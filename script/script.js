@@ -2,6 +2,7 @@
 const ACTIVE = 'active'
 const COMPLITED = 'complited'
 const EDIT = 'edit'
+const ALL = 'all'
 
 // UTILS
 const getElement = selector => document.querySelector(selector)
@@ -17,15 +18,17 @@ const checkers = () => {
 // VARIABLES
 const input = getElement('.input')
 const taskItem = getElement('div')
-const list = getElement('.tasks-list') // ul
+const list = getElement('.tasks-list')
 const counterItem = getElement('.status').querySelector('strong')
 const footer = getElement('footer')
 const completeAllBtn = getElement('[data-all]')
 const ulMenu = getElement('.menu')
-const menuItems = getElement('.menu__item')
+const menuItems = document.querySelectorAll('.menu__item')
 const clearCompleteBtn = getElement('.clear-complited')
 
 let taskList = []
+let listToRender = taskList
+let selectedType = ALL
 
 const toggleStatusTasks = () => {
 	const isSomeCompleted = taskList.some(isActive)
@@ -51,30 +54,22 @@ const checkClearComplited = () => {
 	clearCompleteBtn.classList.remove('display-none')
 }
 
-const renderList = () => {
-	list.innerHTML = ''
-	const names = []
-	const newList = taskList.map(task => {
-		const counter = names.reduce((acc, name) => (name === task.name ? acc + 1 : acc), 0) // rename
-		names.push(task.name)
-
-		task.text = counter ? `${task.name}[${counter}]` : task.name
-		const taskItem = document.createElement('div')
-		if (task.status === COMPLITED) {
-			taskItem.innerHTML = `
-        <li class="task wrapper" data-id="${task.id}">
-          <button class="check checked">✔</button>
-          <div class="task__wrapper">
-            <div class="task__text complited light-black ">
-              ${task.text}
-          </div>
+const createTaskByStatus = task => {
+	switch (task.status) {
+		case COMPLITED:
+			return `
+      <li class="task wrapper" data-id="${task.id}">
+        <button class="check checked">✔</button>
+        <div class="task__wrapper">
+          <div class="task__text complited light-black ">
+            ${task.text}
         </div>
-        <button class="task__btn-remove">X</button>
-      </li>
-        `
-			return taskItem
-		}
-		taskItem.innerHTML = `
+      </div>
+      <button class="task__btn-remove">X</button>
+    </li>
+      `
+		case ACTIVE:
+			return `
         <li class="task wrapper" data-id="${task.id}">
           <button class="check">✔</button>
           <div class="task__wrapper">
@@ -85,18 +80,46 @@ const renderList = () => {
         <button class="task__btn-remove">X</button>
       </li>
         `
-		return taskItem
-	})
+	}
+}
+
+const getTaskName = (names, taskName) => {
+	const counterName = names.reduce(
+		(accumulator, name) => (name === taskName ? accumulator + 1 : accumulator),
+		0
+	)
+
+	names.push(taskName)
+	return counterName ? `${taskName}[${counterName}]` : taskName
+}
+
+const renderList = () => {
+	list.innerHTML = ''
+	const names = []
+
+	const newList = taskList.reduce((acc, task) => {
+		if (task.status !== selectedType && selectedType !== ALL) {
+			return acc
+		}
+		task.text = getTaskName(names, task.name)
+
+		const taskItem = document.createElement('div')
+		if (task.status === COMPLITED) {
+			taskItem.innerHTML = createTaskByStatus(task)
+			return [...acc, taskItem]
+		}
+		taskItem.innerHTML = createTaskByStatus(task)
+		return [...acc, taskItem]
+	}, [])
 
 	refreshCounter()
-
 	newList.forEach(el => list.appendChild(el))
 }
 
 const refreshCounter = () => {
 	const counter = taskList.reduce((acc, { status }) => (status === ACTIVE ? acc + 1 : acc), 0)
 	counterItem.innerText = counter
-	taskList.length ? footer.classList.remove('display-none') : footer.classList.add('display-none')
+	return taskList.length ? footer.classList.remove('display-none') : footer.classList.add('display-none')
 }
 
 const onListClick = ({ target }) => {
@@ -104,8 +127,9 @@ const onListClick = ({ target }) => {
 	const isDelited = target.classList.contains('task__btn-remove')
 	const isChecked = target.classList.contains('check')
 	if (isChecked) {
-		const task = taskList.find(task => task.id === id)
-		task.status = task.status === COMPLITED ? ACTIVE : COMPLITED
+		taskList = taskList.map(task =>
+			task.id === id ? { ...task, status: task.status === COMPLITED ? ACTIVE : COMPLITED } : task
+		)
 	}
 
 	if (isDelited) {
@@ -115,9 +139,9 @@ const onListClick = ({ target }) => {
 }
 
 const onSubmut = ({ key }) => {
-	const text = input.value
+	const text = input.value.trim()
 
-	if (key !== 'Enter' || !text.trim().length) {
+	if (key !== 'Enter' || !text.length) {
 		return
 	}
 
@@ -137,12 +161,8 @@ const onSortMenuClick = ({ target }) => {
 	})
 	target.classList.add('active')
 
-	if (target.getAttribute('data-sort') === 'all') {
-	}
-	if (target.getAttribute('data-sort') === 'active') {
-	}
-	if (target.getAttribute('data-sort') === 'complited') {
-	}
+	selectedType = target.getAttribute('data-sort')
+	renderList()
 }
 
 const onClearComplitedClick = () => {
