@@ -1,208 +1,212 @@
 * {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 h1 {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 body {
-  background-color: #eaeaea;
+	background-color: #eaeaea;
 }
 
 .light-black {
-  color: #373838;
+	color: #373838;
 }
 
 .container {
-  max-width: 500px;
-  margin: 0 auto;
+	max-width: 500px;
+	margin: 0 auto;
 }
 
 .logo {
-  margin-top: 40px;
-  text-align: center;
-  font-size: 80px;
-  color: rgba(255, 255, 255, 0.3);
-  font-weight: bold;
-  text-shadow: -1px -1px rgb(0 0 0 / 20%);
+	margin-top: 40px;
+	text-align: center;
+	font-size: 80px;
+	color: rgba(255, 255, 255, 0.3);
+	font-weight: bold;
+	text-shadow: -1px -1px rgb(0 0 0 / 20%);
 }
 
 .block {
-  width: 100%;
-  height: 16px;
-  background-color: #8d7d77;
-  margin-top: 20px;
+	width: 100%;
+	height: 16px;
+	background-color: #8d7d77;
+	margin-top: 20px;
 }
 
 .wrapper {
-  display: grid;
-  grid-template-columns: 40px 456px;
-  height: 60px;
-  background-color: #fff;
-  border-bottom: 1px dashed #000;
+	display: grid;
+	grid-template-columns: 40px 456px;
+	height: 60px;
+	background-color: #fff;
+	border-bottom: 1px dashed #000;
 }
 
 .check__wrapper {
-  background-color: #fff;
-  display: grid;
-  align-self: center;
-  width: 100%;
-  height: 100%;
+	background-color: #fff;
+	display: grid;
+	align-self: center;
+	width: 100%;
+	height: 100%;
 }
 
 .check-all {
-  justify-self: center;
-  align-self: center;
-  border: none;
-  outline: none;
-  background: #fff;
-  cursor: pointer;
-  font-size: 24px;
-  color: rgb(217, 217, 217);
+	justify-self: center;
+	align-self: center;
+	border: none;
+	outline: none;
+	background: #fff;
+	cursor: pointer;
+	font-size: 24px;
+	color: rgb(217, 217, 217);
 }
 
 .check-all.active {
-  color: #000;
+	color: #000;
 }
 
 .check-text {
-  display: block;
-  font-size: 28px;
-  color: rgb(217, 217, 217);
+	display: block;
+	font-size: 28px;
+	color: rgb(217, 217, 217);
 }
 
 .check-text.checked {
-  color: #000;
+	color: #000;
 }
 
 .rotate90 {
-  transform: rotate(90deg);
+	transform: rotate(90deg);
 }
 
 .input {
-  border: none;
-  width: 100%;
-  height: 60px;
-  font-size: 24px;
+	border: none;
+	width: 100%;
+	height: 60px;
+	font-size: 24px;
 
-  outline: none;
+	outline: none;
 }
 
 .input::-webkit-input-placeholder {
-  font-style: italic;
+	font-style: italic;
 }
 .input:-moz-placeholder {
-  font-style: italic;
+	font-style: italic;
 }
 .input::-moz-placeholder {
-  font-style: italic;
+	font-style: italic;
 }
 .input:-ms-input-placeholder {
-  font-style: italic;
+	font-style: italic;
 }
 
 .tasks-list {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 .task {
-  list-style: none;
-  grid-template-columns: 40px 416px 40px;
+	list-style: none;
+	grid-template-columns: 40px 416px 40px;
 }
 
 .check {
-  justify-self: center;
-  align-self: center;
-  border: none;
-  outline: none;
-  background: #fff;
-  cursor: pointer;
-  color: rgb(217, 217, 217);
-  width: 100%;
-  height: 100%;
+	justify-self: center;
+	align-self: center;
+	border: none;
+	outline: none;
+	background: #fff;
+	cursor: pointer;
+	color: rgb(217, 217, 217);
+	width: 100%;
+	height: 100%;
 }
 
 .check.checked {
-  color: #000;
+	color: #000;
 }
 
 .task__wrapper {
-  width: 100%;
-  font-size: 24px;
-  display: grid;
-  align-self: center;
+	width: 100%;
+	font-size: 24px;
+	display: grid;
+	align-self: center;
 }
 .task__text {
-  width: 100%;
-  font-size: 24px;
-  display: grid;
-  align-self: center;
+	width: 100%;
+	font-size: 24px;
+	display: grid;
+	align-self: center;
 }
 
 .task__text.complited {
-  text-decoration: line-through;
+	text-decoration: line-through;
 }
 
 .footer {
-  max-width: 480px;
-  display: grid;
-  margin: 0;
-  justify-self: center;
-  margin-left: 10px;
-  background-color: #eee;
-  border: 1px #b7b7b7;
+	max-width: 480px;
+	display: grid;
+	margin: 0;
+	justify-self: center;
+	margin-left: 10px;
+	background-color: #eee;
+	border: 1px #b7b7b7;
 }
 
 .footer__inner {
-  justify-self: center;
-  align-self: center;
-  display: grid;
-  grid-template-columns: 2fr 8fr;
-  width: 100%;
-  padding: 5px;
+	justify-self: center;
+	align-self: center;
+	display: grid;
+	grid-template-columns: 2fr 8fr;
+	width: 100%;
+	padding: 5px;
 }
 
 .status {
-  font-size: 14px;
-  padding: 5px;
+	font-size: 14px;
+	padding: 5px;
 }
 
 .navbar {
-  text-align: center;
+	text-align: center;
 }
 
 .menu {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 .menu__item {
-  display: inline;
-  margin-right: 5px;
-  font-size: 14px;
-  cursor: pointer;
+	display: inline;
+	margin-right: 5px;
+	font-size: 14px;
+	cursor: pointer;
 }
 
 .menu__item.active {
-  font-weight: 700;
+	font-weight: 700;
 }
 
 .task:hover .task__btn-remove {
-  display: block;
+	display: block;
 }
 
 .task__btn-remove {
-  display: none;
-  outline: none;
-  border: none;
-  background: #fff;
-  color: #ae8888;
-  font-weight: 700;
+	display: none;
+	outline: none;
+	border: none;
+	background: #fff;
+	color: #ae8888;
+	font-weight: 700;
 }
 
 .task__btn-remove:hover {
-  font-size: 24px;
+	font-size: 24px;
+}
+
+.display-none {
+	display: none;
 }
