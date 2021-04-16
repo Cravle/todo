@@ -160,7 +160,8 @@ body {
 	justify-self: center;
 	align-self: center;
 	display: grid;
-	grid-template-columns: 2fr 8fr;
+	grid-template-columns: 2fr 6fr 2fr;
+	align-self: center;
 	width: 100%;
 	padding: 5px;
 }
@@ -176,7 +177,7 @@ body {
 
 .menu {
 	margin: 0;
-	padding: 0;
+	padding: 5px;
 }
 
 .menu__item {
@@ -209,4 +210,24 @@ body {
 
 .display-none {
 	display: none;
+}
+
+.clear-complited {
+	padding: 5px;
+	text-align: center;
+	font-size: 10px;
+	margin: 0;
+	background-color: #d6d6d6;
+	height: 20px;
+	align-self: center;
+	border: none;
+	border-radius: 3px;
+	box-shadow: 0 -1px 0 0 rgb(0 0 0 / 20%);
+	cursor: pointer;
+	transition: background 0.1 linear;
+	outline: none;
+}
+
+.clear-complited:hover {
+	background-color: #cbcbcb;
 }
