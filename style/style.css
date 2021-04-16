@@ -202,6 +202,7 @@ body {
 	background: #fff;
 	color: #ae8888;
 	font-weight: 700;
+	transition: font-size 0.2s linear;
 }
 
 .task__btn-remove:hover {
