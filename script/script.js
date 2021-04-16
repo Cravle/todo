@@ -8,6 +8,11 @@ const getElement = selector => document.querySelector(selector)
 const isActive = task => task.status === ACTIVE
 const isCompleted = task => task.status === COMPLITED
 const generateId = () => Date.now()
+const checkers = () => {
+	checkTasksStatus()
+	checkClearComplited()
+	renderList()
+}
 
 // VARIABLES
 const input = getElement('.input')
@@ -16,8 +21,9 @@ const list = getElement('.tasks-list') // ul
 const counterItem = getElement('.status').querySelector('strong')
 const footer = getElement('footer')
 const completeAllBtn = getElement('[data-all]')
-const ulMenu = document.querySelector('.menu')
-const menuItems = document.querySelectorAll('.menu__item')
+const ulMenu = getElement('.menu')
+const menuItems = getElement('.menu__item')
+const clearCompleteBtn = getElement('.clear-complited')
 
 let taskList = []
 
@@ -25,14 +31,24 @@ const toggleStatusTasks = () => {
 	const isSomeCompleted = taskList.some(isActive)
 	taskList = taskList.map(task => ({ ...task, status: isSomeCompleted ? COMPLITED : ACTIVE }))
 
-	checkTasksStatus()
-	renderList()
+	checkers()
 }
 
 const checkTasksStatus = () => {
-	console.log(taskList.every(isCompleted), 'taskList.every(isCompleted)')
-	console.log(taskList, 'taskList')
-	taskList.every(isCompleted) ? completeAllBtn.classList.add('active') : completeAllBtn.classList.remove('active')
+	taskList.every(isCompleted)
+		? completeAllBtn.classList.add('active')
+		: completeAllBtn.classList.remove('active')
+}
+
+const checkClearComplited = () => {
+	if (!taskList.some(isCompleted)) {
+		clearCompleteBtn.classList.add('display-none')
+		return
+	}
+
+	const complitedCount = taskList.reduce((acc, task) => (task.status === COMPLITED ? acc + 1 : acc), 0)
+	clearCompleteBtn.querySelector('span').innerText = `(${complitedCount})`
+	clearCompleteBtn.classList.remove('display-none')
 }
 
 const renderList = () => {
@@ -95,8 +111,7 @@ const onListClick = ({ target }) => {
 	if (isDelited) {
 		taskList = taskList.filter(task => task.id !== id)
 	}
-	renderList()
-	checkTasksStatus()
+	checkers()
 }
 
 const onSubmut = ({ key }) => {
@@ -110,9 +125,7 @@ const onSubmut = ({ key }) => {
 	taskList.push({ text, name: text, status: ACTIVE, id })
 	input.value = ''
 
-	checkTasksStatus()
-	renderList()
-	refreshCounter()
+	checkers()
 }
 
 const onSortMenuClick = ({ target }) => {
@@ -132,6 +145,11 @@ const onSortMenuClick = ({ target }) => {
 	}
 }
 
+const onClearComplitedClick = () => {
+	taskList = taskList.filter(task => task.status !== COMPLITED)
+	checkers()
+}
+
 completeAllBtn.addEventListener('click', toggleStatusTasks)
 
 list.addEventListener('click', onListClick)
@@ -139,3 +157,5 @@ list.addEventListener('click', onListClick)
 input.addEventListener('keyup', onSubmut)
 
 ulMenu.addEventListener('click', onSortMenuClick)
+
+clearCompleteBtn.addEventListener('click', onClearComplitedClick)
