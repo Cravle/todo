@@ -23,12 +23,15 @@ body {
 }
 
 .todo {
-	position: relative;
 	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.15);
 	z-index: 1;
 }
 
-.todo:before {
+.todo__inner {
+	position: relative;
+}
+
+.todo__inner:before {
 	content: '';
 	border-left: 1px solid var(--pink);
 	border-right: 1px solid var(--pink);
@@ -83,10 +86,6 @@ body {
 	background-color: #fff;
 }
 
-.border-bottom:last-child {
-	border-bottom: none;
-}
-
 .check__wrapper {
 	background-color: #fff;
 	display: grid;
@@ -136,9 +135,28 @@ body {
 	font-style: italic;
 }
 
+.tasks-list {
+	overflow-y: auto;
+	max-height: 305px;
+}
+
+.tasks-list::-webkit-scrollbar {
+	width: 0.8em;
+}
+
+.tasks-list::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.tasks-list::-webkit-scrollbar-thumb {
+	background-color: #8d7d77;
+	/* outline: 1px solid slategrey;	 */
+	border-radius: 3px;
+}
 .task {
 	list-style: none;
 	grid-template-columns: 1fr 8fr 1fr;
+	position: relative;
 	z-index: 1;
 }
 
@@ -179,11 +197,17 @@ body {
 .task__input {
 	width: 99%;
 	font-size: 20px;
+	border: 1px solid #9c9c9c;
+	outline: none;
+	height: 58px;
+	width: 420px;
+	position: absolute;
+	padding-left: 10px;
 	display: grid;
 	align-self: center;
 }
 
-.task__text.complited {
+.task__text.completed {
 	text-decoration: line-through;
 	color: #c0c0c0;
 }
@@ -278,7 +302,7 @@ body {
 	visibility: hidden;
 }
 
-.clear-complited {
+.clear-completed {
 	padding: 5px;
 	text-align: center;
 	font-size: 10px;
@@ -294,6 +318,6 @@ body {
 	outline: none;
 }
 
-.clear-complited:hover {
+.clear-completed:hover {
 	background-color: #cbcbcb;
 }
