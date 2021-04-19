@@ -183,7 +183,7 @@ body {
 	align-self: center;
 }
 
-.task__text.complited {
+.task__text.completed {
 	text-decoration: line-through;
 	color: #c0c0c0;
 }
@@ -278,7 +278,7 @@ body {
 	visibility: hidden;
 }
 
-.clear-complited {
+.clear-completed {
 	padding: 5px;
 	text-align: center;
 	font-size: 10px;
@@ -294,6 +294,6 @@ body {
 	outline: none;
 }
 
-.clear-complited:hover {
+.clear-completed:hover {
 	background-color: #cbcbcb;
 }
