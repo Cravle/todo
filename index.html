@@ -1,65 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style/style.css" />
-    <title>TODO</title>
-  </head>
-  <body>
-    <div class="app">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style/style.css" />
+  <title>TODO</title>
+</head>
+
+<body>
+  <div class="app">
     <div class="container">
       <header class="header">
         <h1 class="logo">todos</h1>
       </header>
 
-      <div class="block"/></div>
+      <div class="block" />
+    </div>
 
-      <section class="todo">
-
+    <section class="todo">
+      <div class="todo__inner">
         <div class="wrapper border-bottom">
           <div class="check__wrapper">
             <button class="check-all rotate90" data-all>
               »
             </button>
           </div>
-          <input
-            class="input light-black"
-            type="text"
-            placeholder="Whats need to be done"
-          />
+          <input class="input light-black" type="text" placeholder="Whats need to be done?" />
         </div>
         <div class="tasks">
           <ul class="tasks-list">
-            
-        
+
+
           </ul>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <footer class="footer hidden">
-        <div class="footer__inner">
-          <div class="status">
-            <strong>0</strong> items left
-          </div>
-          <navbar class="navbar">
-              <ul class="menu">
-                <li class="menu__item active" data-sort="all">All</li>
-                <li class="menu__item" data-sort="active">Active</li>
-                <li class="menu__item" data-sort="completed">Completed</li>
-              </ul>
-          </navbar>
-
-          <button class="clear-completed hidden">
-            Clear completed <span>(1)</span>
-          </button>
+    <footer class="footer hidden">
+      <div class="footer__inner">
+        <div class="status">
+          <strong>0</strong> items left
         </div>
-      </footer>
+        <navbar class="navbar">
+          <ul class="menu">
+            <li class="menu__item active" data-sort="all">All</li>
+            <li class="menu__item" data-sort="active">Active</li>
+            <li class="menu__item" data-sort="completed">Completed</li>
+          </ul>
+        </navbar>
 
-    </div>
+        <button class="clear-completed hidden">
+          Clear completed <span>(1)</span>
+        </button>
+      </div>
+    </footer>
+
+  </div>
   </div>
 
-    <script src="./script/script.js"></script>
-  </body>
+  <script src="./script/script.js"></script>
+</body>
+
 </html>

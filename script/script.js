@@ -1,23 +1,16 @@
+// CONSTANTS
+const ACTIVE = 'active'
+const COMPLETED = 'completed'
+const EDIT = 'edit'
+const ALL = 'all'
+
+// UTILS
+const getElement = selector => document.querySelector(selector)
+const isActive = task => task.status === ACTIVE
+const isCompleted = task => task.status === COMPLETED
+const generateId = () => Date.now()
+
 window.addEventListener('DOMContentLoaded', () => {
-	// CONSTANTS
-	const ACTIVE = 'active'
-	const COMPLETED = 'completed'
-	const EDIT = 'edit'
-	const ALL = 'all'
-
-	// UTILS
-	const getElement = selector => document.querySelector(selector)
-	const isActive = task => task.status === ACTIVE
-	const isCompleted = task => task.status === COMPLETED
-	const generateId = () => Date.now()
-	const checkers = () => {
-		checkTasksStatus()
-		countTask()
-		renderList()
-		saveDataToLocalStorage()
-	}
-
-	// VARIABLES
 	const input = getElement('.input')
 	const list = getElement('.tasks-list')
 	const counterItem = getElement('.status').querySelector('strong')
@@ -29,6 +22,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	let taskList = []
 	let selectedType = ALL
+
+	const checkers = () => {
+		checkTasksStatus()
+		countTask()
+		renderList()
+		saveDataToLocalStorage()
+	}
 
 	const windowOnLoad = () => {
 		if (localStorage.taskList) {
@@ -78,7 +78,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		counterItem.innerText = activeTask
 		taskList.length ? footer.classList.remove('hidden') : footer.classList.add('hidden')
 
-		if (!taskList.some(isCompleted)) {
+		if (!completedTask) {
 			clearCompleteBtn.classList.add('hidden')
 			return
 		}
