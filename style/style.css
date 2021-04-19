@@ -2,19 +2,10 @@
 	margin: 0;
 	padding: 0;
 }
-h1 {
-	margin: 0;
-	padding: 0;
-}
 
-li {
-	margin: 0;
-	padding: 0;
-}
-
-ul {
-	margin: 0;
-	padding: 0;
+:root {
+	--pink: #f5d6d6;
+	--gray: #d9d9d9;
 }
 
 body {
@@ -28,6 +19,25 @@ body {
 .container {
 	max-width: 500px;
 	margin: 0 auto;
+	position: relative;
+}
+
+.todo {
+	position: relative;
+	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.15);
+	z-index: 1;
+}
+
+.todo:before {
+	content: '';
+	border-left: 1px solid var(--pink);
+	border-right: 1px solid var(--pink);
+	width: 2px;
+	position: absolute;
+	top: 0;
+	left: 43px;
+	height: 100%;
+	z-index: 1000;
 }
 
 .logo {
@@ -42,16 +52,39 @@ body {
 .block {
 	width: 100%;
 	height: 16px;
+	border-bottom: 1px solid #6c615c;
 	background-color: #8d7d77;
 	margin-top: 20px;
+	z-index: 2;
+	position: relative;
+}
+
+.block:before {
+	content: '';
+	border-left: 1px solid var(--pink);
+	border-right: 1px solid var(--pink);
+	width: 2px;
+	position: absolute;
+	top: 0;
+	left: 43px;
+	height: 100%;
+	z-index: 1000;
+	opacity: 0.1;
+}
+
+.border-bottom {
+	border-bottom: 1px dotted #ccc;
 }
 
 .wrapper {
 	display: grid;
-	grid-template-columns: 40px 456px;
+	grid-template-columns: 1fr 9fr;
 	height: 60px;
 	background-color: #fff;
-	border-bottom: 1px dashed #000;
+}
+
+.border-bottom:last-child {
+	border-bottom: none;
 }
 
 .check__wrapper {
@@ -70,21 +103,11 @@ body {
 	background: #fff;
 	cursor: pointer;
 	font-size: 24px;
-	color: rgb(217, 217, 217);
+	color: var(--gray);
 }
 
 .check-all.active {
-	color: #000;
-}
-
-.check-text {
-	display: block;
-	font-size: 28px;
-	color: rgb(217, 217, 217);
-}
-
-.check-text.checked {
-	color: #000;
+	color: #737373;
 }
 
 .rotate90 {
@@ -93,10 +116,10 @@ body {
 
 .input {
 	border: none;
-	width: 100%;
+	width: 9fr;
 	height: 60px;
 	font-size: 24px;
-
+	padding-left: 10px;
 	outline: none;
 }
 
@@ -113,14 +136,10 @@ body {
 	font-style: italic;
 }
 
-.tasks-list {
-	padding: 0;
-	margin: 0;
-}
-
 .task {
 	list-style: none;
-	grid-template-columns: 40px 416px 40px;
+	grid-template-columns: 1fr 8fr 1fr;
+	z-index: 1;
 }
 
 .check {
@@ -130,13 +149,15 @@ body {
 	outline: none;
 	background: #fff;
 	cursor: pointer;
-	color: rgb(217, 217, 217);
+	color: #d9d9d9;
 	width: 100%;
 	height: 100%;
+	font-size: 24px;
 }
 
 .check.checked {
-	color: #000;
+	color: #85ada7;
+	text-shadow: 0 1px 0 #669991;
 }
 
 .task__wrapper {
@@ -150,6 +171,7 @@ body {
 .task__text {
 	width: 99%;
 	font-size: 24px;
+	padding-left: 10px;
 	display: grid;
 	align-self: center;
 }
@@ -163,26 +185,45 @@ body {
 
 .task__text.complited {
 	text-decoration: line-through;
+	color: #c0c0c0;
 }
 
 .footer {
-	max-width: 480px;
-	display: grid;
-	margin: 0;
 	justify-self: center;
-	margin-left: 10px;
-	background-color: #eee;
-	border: 1px #b7b7b7;
+	align-self: center;
+	color: #777;
+	padding: 0 15px;
+	position: absolute;
+	display: grid;
+	right: 0;
+	bottom: -31px;
+	left: 0;
+	height: 24px;
+	z-index: -1;
+	text-align: center;
+}
+
+.footer:before {
+	content: '';
+	position: absolute;
+	right: 0;
+	bottom: 31px;
+	left: 0;
+	width: 500px;
+	height: 50px;
+	z-index: -1;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), 0 6px 0 -3px rgba(255, 255, 255, 0.8),
+		0 7px 1px -3px rgba(0, 0, 0, 0.3), 0 43px 0 -6px rgba(255, 255, 255, 0.8),
+		0 44px 2px -6px rgba(0, 0, 0, 0.2);
 }
 
 .footer__inner {
 	justify-self: center;
 	align-self: center;
 	display: grid;
-	grid-template-columns: 2fr 6fr 2fr;
+	grid-template-columns: 2fr 6fr 2.5fr;
 	align-self: center;
 	width: 100%;
-	padding: 5px;
 }
 
 .status {
@@ -226,6 +267,7 @@ body {
 
 .task__btn-remove:hover {
 	font-size: 24px;
+	text-shadow: 0 0 1px #000, 0 0 10px rgba(199, 107, 107, 0.8);
 }
 
 .display-none {
@@ -241,7 +283,7 @@ body {
 	text-align: center;
 	font-size: 10px;
 	margin: 0;
-	background-color: #d6d6d6;
+	background-color: rgba(0, 0, 0, 0.1);
 	height: 20px;
 	align-self: center;
 	border: none;

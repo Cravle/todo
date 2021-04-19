@@ -48,13 +48,13 @@ const checkTasksStatus = () => {
 
 const checkClearComplited = () => {
 	if (!taskList.some(isCompleted)) {
-		clearCompleteBtn.classList.add('display-none')
+		clearCompleteBtn.classList.add('hidden')
 		return
 	}
 
 	const complitedCount = taskList.reduce((acc, task) => (task.status === COMPLITED ? acc + 1 : acc), 0)
 	clearCompleteBtn.querySelector('span').innerText = `(${complitedCount})`
-	clearCompleteBtn.classList.remove('display-none')
+	clearCompleteBtn.classList.remove('hidden')
 }
 
 const createTaskByStatus = task => {
@@ -65,7 +65,7 @@ const createTaskByStatus = task => {
         <div class="task__wrapper">
           <input class="task__input light-black" value="${task.text}" autofocus/>
       </div>
-      <button class="task__btn-remove hidden" >X</button>
+      <button class="task__btn-remove hidden" >✖</button>
     </li>
     `
 	}
@@ -77,7 +77,7 @@ const createTaskByStatus = task => {
         <div class="task__wrapper">
           <div class="task__text complited light-black ">${task.text}</div>
       </div>
-      <button class="task__btn-remove">X</button>
+      <button class="task__btn-remove">✖</button>
     </li>
       `
 	} else {
@@ -87,7 +87,7 @@ const createTaskByStatus = task => {
           <div class="task__wrapper">
             <div class="task__text light-black ">${task.text}</div>
         </div>
-        <button class="task__btn-remove">X</button>
+        <button class="task__btn-remove">✖</button>
       </li>
         `
 	}
@@ -117,6 +117,7 @@ const renderList = () => {
 		task.text = getTaskName(names, task.name)
 
 		const taskItem = document.createElement('div')
+		taskItem.classList.add('border-bottom')
 		if (task.status === COMPLITED) {
 			taskItem.innerHTML = createTaskByStatus(task)
 			return [...acc, taskItem]
@@ -148,7 +149,7 @@ const renderList = () => {
 const refreshCounter = () => {
 	const counter = taskList.reduce((acc, { status }) => (status === ACTIVE ? acc + 1 : acc), 0)
 	counterItem.innerText = counter
-	return taskList.length ? footer.classList.remove('display-none') : footer.classList.add('display-none')
+	return taskList.length ? footer.classList.remove('hidden') : footer.classList.add('hidden')
 }
 
 const onSubmut = ({ key }) => {
