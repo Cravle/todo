@@ -10,6 +10,70 @@ const isActive = task => task.status === ACTIVE
 const isCompleted = task => task.status === COMPLETED
 const generateId = () => Date.now()
 
+class Task {
+	constructor({ text, name, status, id = generateId() }) {
+		this.text = text
+		this.name = name
+		this.status = status
+		this.id = id
+		this.isEdit = false
+	}
+
+	ToggleStatus() {
+		this.status = this.status === ACTIVE ? COMPLETED : ACTIVE
+	}
+
+	Create() {
+		const taskItem = document.createElement('div')
+		taskItem.classList.add('border-bottom')
+
+		if (this.isEdit) {
+			taskItem.innerHTML = `
+      <li class="task wrapper" data-id="${this.id}">
+        <button class="check hidden" >✔</button>
+        <div class="task__wrapper">
+          <input class="task__input light-black" value="${this.text}" />
+      </div>
+      <button class="task__btn-remove hidden" >✖</button>
+    </li>
+    `
+			return taskItem
+		}
+
+		if (this.status === COMPLETED) {
+			taskItem.innerHTML = `
+      <li class="task wrapper" data-id="${this.id}">
+        <button class="check checked">✔</button>
+        <div class="task__wrapper">
+          <div class="task__text completed light-black ">${this.text}</div>
+      </div>
+      <button class="task__btn-remove">✖</button>
+    </li>
+      `
+			return taskItem
+		}
+		taskItem.innerHTML = `
+			<li class="task wrapper" data-id="${this.id}">
+				<button class="check">✔</button>
+				<div class="task__wrapper">
+					<div class="task__text light-black ">${this.text}</div>
+			</div>
+			<button class="task__btn-remove">✖</button>
+		</li>
+			`
+		return taskItem
+	}
+
+	CreateTextByName(names) {
+		const counterName = names.reduce(
+			(accumulator, name) => (name === this.name ? accumulator + 1 : accumulator),
+			0
+		)
+
+		this.text = counterName ? `${this.name}[${counterName}]` : this.name
+	}
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 	const input = getElement('.input')
 	const list = getElement('.tasks-list')
@@ -20,160 +84,143 @@ window.addEventListener('DOMContentLoaded', () => {
 	const filters = document.querySelectorAll('.menu__item')
 	const clearCompleteBtn = getElement('.clear-completed')
 
-	let taskList = []
-	let selectedType = ALL
+	class MakeTodoList {
+		taskList = []
 
-	const checkers = () => {
-		checkTasksStatus()
-		countTask()
-		renderList()
-		saveDataToLocalStorage()
-	}
-
-	const windowOnLoad = () => {
-		if (localStorage.taskList) {
-			taskList = JSON.parse(localStorage.getItem('taskList'))
+		constructor(parent) {
+			this.parent = parent
+			this.selectedType = localStorage.getItem('selectedType') || ALL
 		}
-		if (localStorage.selectedType) {
-			selectedType = localStorage.getItem('selectedType')
+
+		push(task) {
+			this.taskList.push(task)
 		}
-		checkers()
-		changeFilter()
-	}
 
-	const saveDataToLocalStorage = () => {
-		localStorage.taskList = JSON.stringify(taskList)
-		localStorage.selectedType = selectedType
-	}
+		render() {
+			this.parent.innerHTML = ''
+			const names = []
+			this.taskList = this.taskList.filter(task => task.name.trim().length)
+			const newList = this.taskList.reduce((acc, task) => {
+				if (task.status !== this.selectedType && this.selectedType !== ALL) {
+					return acc
+				}
+				task.CreateTextByName(names)
+				names.push(task.name)
 
-	const toggleStatusTasks = () => {
-		const isSomeCompleted = taskList.some(isActive)
-		taskList = taskList.map(task => ({ ...task, status: isSomeCompleted ? COMPLETED : ACTIVE }))
+				const taskItem = task.Create()
+				return [...acc, taskItem]
+			}, [])
+			this.countTask()
+			this.checkAllStatus()
+			this.saveDataToLocalStorage()
+			newList.forEach(el => this.parent.appendChild(el))
 
-		checkers()
-	}
+			const checkerBtns = this.parent.querySelectorAll('.check')
+			checkerBtns.forEach(checkItem => checkItem.addEventListener('click', this.onCheckClick.bind(this)))
 
-	const checkTasksStatus = () => {
-		const isAllCompleted = taskList.every(isCompleted)
+			const removeBtns = this.parent.querySelectorAll('.task__btn-remove')
+			removeBtns.forEach(removeItem => removeItem.addEventListener('click', this.onRemoveClick.bind(this)))
 
-		if (!taskList.length || !isAllCompleted) {
-			completeAllBtn.classList.remove('active')
-			return
-		}
-		completeAllBtn.classList.add('active')
-	}
+			const textItems = this.parent.querySelectorAll('.task__text')
+			textItems.forEach(textItem => textItem.addEventListener('dblclick', this.onTextDblClick.bind(this)))
 
-	const countTask = () => {
-		const { activeTask, completedTask } = taskList.reduce(
-			(acc, { status }) =>
-				status === ACTIVE
-					? { ...acc, activeTask: acc.activeTask + 1 }
-					: { ...acc, completedTask: acc.completedTask + 1 },
-			{
-				activeTask: 0,
-				completedTask: 0,
+			const taskInput = this.parent.querySelector('.task__input')
+			if (taskInput) {
+				taskInput.focus()
+				taskInput.addEventListener('blur', this.onInputBlur.bind(this))
+				taskInput.addEventListener('keyup', this.onKeyUp.bind(this))
 			}
-		)
-
-		counterItem.innerText = activeTask
-		taskList.length ? footer.classList.remove('hidden') : footer.classList.add('hidden')
-
-		if (!completedTask) {
-			clearCompleteBtn.classList.add('hidden')
-			return
 		}
 
-		clearCompleteBtn.querySelector('span').innerText = `(${completedTask})`
-		clearCompleteBtn.classList.remove('hidden')
-	}
-
-	const createTask = task => {
-		const taskItem = document.createElement('div')
-		taskItem.classList.add('border-bottom')
-
-		if (task.isEdit) {
-			taskItem.innerHTML = `
-      <li class="task wrapper" data-id="${task.id}">
-        <button class="check hidden" >✔</button>
-        <div class="task__wrapper">
-          <input class="task__input light-black" value="${task.text}" />
-      </div>
-      <button class="task__btn-remove hidden" >✖</button>
-    </li>
-    `
-			return taskItem
+		saveDataToLocalStorage() {
+			localStorage.taskList = JSON.stringify(this.taskList)
+			localStorage.selectedType = this.selectedType
 		}
 
-		if (task.status === COMPLETED) {
-			taskItem.innerHTML = `
-      <li class="task wrapper" data-id="${task.id}">
-        <button class="check checked">✔</button>
-        <div class="task__wrapper">
-          <div class="task__text completed light-black ">${task.text}</div>
-      </div>
-      <button class="task__btn-remove">✖</button>
-    </li>
-      `
-			return taskItem
-		}
+		checkAllStatus() {
+			const isAllCompleted = this.taskList.every(isCompleted)
 
-		taskItem.innerHTML = `
-        <li class="task wrapper" data-id="${task.id}">
-          <button class="check">✔</button>
-          <div class="task__wrapper">
-            <div class="task__text light-black ">${task.text}</div>
-        </div>
-        <button class="task__btn-remove">✖</button>
-      </li>
-        `
-
-		return taskItem
-	}
-
-	const getTaskName = (names, taskName) => {
-		const counterName = names.reduce(
-			(accumulator, name) => (name === taskName ? accumulator + 1 : accumulator),
-			0
-		)
-
-		return counterName ? `${taskName}[${counterName}]` : taskName
-	}
-
-	const renderList = () => {
-		list.innerHTML = ''
-		const names = []
-
-		taskList = taskList.filter(task => task.name.trim().length)
-
-		const newList = taskList.reduce((acc, task) => {
-			if (task.status !== selectedType && selectedType !== ALL) {
-				return acc
+			if (!this.taskList.length || !isAllCompleted) {
+				completeAllBtn.classList.remove('active')
+				return
 			}
-			task.text = getTaskName(names, task.name)
-			names.push(task.text)
+			completeAllBtn.classList.add('active')
+		}
 
-			const taskItem = createTask(task)
-			return [...acc, taskItem]
-		}, [])
-		countTask()
-		newList.forEach(el => list.appendChild(el))
+		countTask() {
+			const { activeTask, completedTask } = this.taskList.reduce(
+				(acc, { status }) =>
+					status === ACTIVE
+						? { ...acc, activeTask: acc.activeTask + 1 }
+						: { ...acc, completedTask: acc.completedTask + 1 },
+				{
+					activeTask: 0,
+					completedTask: 0,
+				}
+			)
 
-		const checkerBtns = list.querySelectorAll('.check')
-		checkerBtns.forEach(checkItem => checkItem.addEventListener('click', onCheckClick))
+			counterItem.innerText = activeTask
+			this.taskList.length ? footer.classList.remove('hidden') : footer.classList.add('hidden')
+			if (!completedTask) {
+				clearCompleteBtn.classList.add('hidden')
+				return
+			}
 
-		const removeBtns = list.querySelectorAll('.task__btn-remove')
-		removeBtns.forEach(removeItem => removeItem.addEventListener('click', onRemoveClick))
+			clearCompleteBtn.querySelector('span').innerText = `(${completedTask})`
+			clearCompleteBtn.classList.remove('hidden')
+		}
 
-		const textItems = list.querySelectorAll('.task__text')
-		textItems.forEach(textItem => textItem.addEventListener('dblclick', onTextDblClick))
+		clearCompleted() {
+			this.taskList = this.taskList.filter(task => task.status !== COMPLETED)
+		}
 
-		const taskInput = list.querySelector('.task__input')
-		if (taskInput) {
-			taskInput.focus()
-			taskInput.addEventListener('blur', onInputBlur)
-			taskInput.addEventListener('keyup', onKeyUpBlur)
+		toggleStatusTasks() {
+			const isSomeCompleted = this.taskList.some(isActive)
+			this.taskList.forEach(task => {
+				task.status = isSomeCompleted ? COMPLETED : ACTIVE
+			})
+		}
+
+		onCheckClick({ target }) {
+			const id = Number(target.parentElement.dataset.id)
+			const task = this.taskList.find(task => task.id === id)
+			task.ToggleStatus()
+
+			this.render()
+		}
+
+		onRemoveClick = ({ target }) => {
+			const id = Number(target.parentElement.dataset.id)
+			this.taskList = this.taskList.filter(task => task.id !== id)
+			this.render()
+		}
+
+		onTextDblClick({ target }) {
+			const id = Number(target.parentElement.parentElement.dataset.id)
+			const task = this.taskList.find(task => task.id === id)
+			task.isEdit = true
+
+			this.render()
+		}
+
+		onInputBlur(e) {
+			e.preventDefault()
+			const id = Number(e.target.parentElement.parentElement.dataset.id)
+			const task = this.taskList.find(task => task.id === id)
+			task.name = e.target.value
+			task.isEdit = false
+			this.render()
+			return false
+		}
+
+		onKeyUp(e) {
+			e.preventDefault()
+			e.key === 'Enter' && this.onInputBlur(e)
+			return false
 		}
 	}
+
+	const taskList = new MakeTodoList(list)
 
 	const onSubmit = ({ key }) => {
 		const text = input.value.trim()
@@ -182,53 +229,38 @@ window.addEventListener('DOMContentLoaded', () => {
 			return
 		}
 
-		const id = generateId()
-		taskList.push({ text, name: text, status: ACTIVE, id, isEdit: false })
+		taskList.push(new Task({ text, name: text, status: ACTIVE }))
 		input.value = ''
 
-		checkers()
+		taskList.render()
 	}
 
-	const onCheckClick = ({ target }) => {
-		const id = Number(target.parentElement.dataset.id)
-		taskList = taskList.map(task =>
-			task.id === id ? { ...task, status: task.status === COMPLETED ? ACTIVE : COMPLETED } : task
-		)
-		checkers()
+	const windowOnLoad = () => {
+		if (localStorage.taskList) {
+			const savedTasks = JSON.parse(localStorage.getItem('taskList'))
+			savedTasks.forEach(task => {
+				taskList.push(new Task(task))
+			})
+		}
+
+		taskList.render()
+		changeFilter()
 	}
 
-	const onRemoveClick = ({ target }) => {
-		const id = Number(target.parentElement.dataset.id)
-		taskList = taskList.filter(task => task.id !== id)
-		checkers()
+	const toggleStatusTasks = () => {
+		taskList.toggleStatusTasks()
+
+		taskList.render()
 	}
 
 	const changeFilter = () => {
-		filters.forEach(item => {
-			if (item.getAttribute('data-sort') === selectedType) {
-				item.classList.add('active')
+		filters.forEach(filter => {
+			if (filter.getAttribute('data-sort') === taskList.selectedType) {
+				filter.classList.add('active')
 			} else {
-				item.classList.remove('active')
+				filter.classList.remove('active')
 			}
 		})
-	}
-
-	const onInputBlur = e => {
-		const id = Number(e.target.parentElement.parentElement.dataset.id)
-		taskList = taskList.map(task =>
-			task.id === id ? { ...task, name: e.target.value, isEdit: false } : task
-		)
-		checkers()
-	}
-
-	const onKeyUpBlur = e => {
-		e.key === 'Enter' && onInputBlur(e)
-	}
-
-	const onTextDblClick = ({ target }) => {
-		const id = Number(target.parentElement.parentElement.dataset.id)
-		taskList = taskList.map(task => (task.id === id ? { ...task, isEdit: true } : task))
-		checkers()
 	}
 
 	const onSortMenuClick = ({ target }) => {
@@ -236,15 +268,14 @@ window.addEventListener('DOMContentLoaded', () => {
 			return
 		}
 
-		selectedType = target.getAttribute('data-sort')
+		taskList.selectedType = target.getAttribute('data-sort')
 		changeFilter()
-		renderList()
-		saveDataToLocalStorage()
+		taskList.render()
 	}
 
 	const onClearCompletedClick = () => {
-		taskList = taskList.filter(task => task.status !== COMPLETED)
-		checkers()
+		taskList.clearCompleted()
+		taskList.render()
 	}
 
 	completeAllBtn.addEventListener('click', toggleStatusTasks)

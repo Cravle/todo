@@ -187,11 +187,15 @@ body {
 }
 
 .task__text {
-	width: 99%;
+	/* width: 99%; */
+	max-width: 400px;
 	font-size: 24px;
 	padding-left: 10px;
 	display: grid;
 	align-self: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .task__input {
